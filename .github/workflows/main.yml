@@ -1,0 +1,32 @@
+
+name: Student Portal CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t student-portal:latest .
+
+      - name: Run Student Portal Container
+        run: docker run -d -p 8081:80 --name portal-test student-portal:latest
+
+      - name: Test Application
+        run: |
+          sleep 5
+          curl --fail http://localhost:8081
+
+      - name: Stop Container
+        if: always()
+        run: docker rm -f portal-test || true
+
