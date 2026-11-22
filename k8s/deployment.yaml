@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: student-portal
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: student-portal
